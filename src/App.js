@@ -2,15 +2,82 @@ import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 const App = () => {
+    const [firstNum, setFirstNum] = useState('');
+    const [secondNum, setSecondNum] = useState('');
+    const [thirdNum, setThirdNum] = useState('');
+    const [fourthNum, setFourthNum] = useState('');
+    const [allNums, setAllNums] = useState('');
+
+    const firstInput = useRef();
+    const focusFirstInput = () => firstInput.current.focus();
+    const secondInput = useRef();
+    const focusSecondInput = () => secondInput.current.focus();
+    const thirdInput = useRef();
+    const focusThirdInput = () => thirdInput.current.focus();
+    const fourthInput = useRef();
+    const focusFourthInput = () => fourthInput.current.focus();
+    const buttonRef = useRef();
+    const focusButton = () => buttonRef.current.focus();
+
+    const assignFirstNum = e => {
+        setFirstNum(e.target.value);
+        focusSecondInput();
+    };
+    const assignSecondNum = e => {
+        setSecondNum(e.target.value);
+        focusThirdInput();
+    };
+    const assignThirdNum = e => {
+        setThirdNum(e.target.value);
+        focusFourthInput();
+    };
+    const assignFourthNum = e => {
+        setFourthNum(e.target.value);
+        focusButton();
+    };
+
+    const submit = e => {
+        e.preventDefault();
+        console.log(firstNum, secondNum, thirdNum, fourthNum);
+    };
+
     return (
         <Container>
-            <Form type='submit'>
-                <Input type='text' />
-                <Input type='text' />
-                <Input type='text' />
-                <Input type='text' />
+            <Form type='submit' onSubmit={submit}>
+                <Input
+                    type='text'
+                    inputMode='numeric'
+                    pattern='[0-9]*'
+                    ref={firstInput}
+                    value={firstNum}
+                    onChange={assignFirstNum}
+                />
+                <Input
+                    type='text'
+                    inputMode='numeric'
+                    pattern='[0-9]*'
+                    ref={secondInput}
+                    value={secondNum}
+                    onChange={assignSecondNum}
+                />
+                <Input
+                    type='text'
+                    inputMode='numeric'
+                    pattern='[0-9]*'
+                    ref={thirdInput}
+                    value={thirdNum}
+                    onChange={assignThirdNum}
+                />
+                <Input
+                    type='text'
+                    inputMode='numeric'
+                    pattern='[0-9]*'
+                    ref={fourthInput}
+                    value={fourthNum}
+                    onChange={assignFourthNum}
+                />
 
-                <Button>submit</Button>
+                <Button ref={buttonRef}>submit</Button>
             </Form>
         </Container>
     );
