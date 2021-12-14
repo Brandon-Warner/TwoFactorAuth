@@ -6,7 +6,8 @@ const App = () => {
     const [secondNum, setSecondNum] = useState('');
     const [thirdNum, setThirdNum] = useState('');
     const [fourthNum, setFourthNum] = useState('');
-    const [allNums, setAllNums] = useState('');
+    const [message, setMessage] = useState();
+    const authCode = '2468';
 
     const firstInput = useRef();
     const focusFirstInput = () => firstInput.current.focus();
@@ -36,9 +37,34 @@ const App = () => {
         focusButton();
     };
 
+    // on backspace, the focus will shift to the previous input
+    const keyDown = (e, fn) => {
+        if (e.keyCode === 8) {
+            fn();
+        }
+    };
+
+    const newMessage = text => {
+        setMessage(text);
+        setTimeout(() => {
+            setMessage(null);
+        }, 5000);
+    };
+
     const submit = e => {
         e.preventDefault();
-        console.log(firstNum, secondNum, thirdNum, fourthNum);
+        let str = `${firstNum}${secondNum}${thirdNum}${fourthNum}`;
+        console.log('str: ', str);
+
+        str === authCode
+            ? newMessage('Success! Authorization code correct')
+            : newMessage('Authorization code incorrect');
+
+        setFirstNum('');
+        setSecondNum('');
+        setThirdNum('');
+        setFourthNum('');
+        focusFirstInput();
     };
 
     return (
@@ -59,6 +85,7 @@ const App = () => {
                     ref={secondInput}
                     value={secondNum}
                     onChange={assignSecondNum}
+                    onKeyDown={e => keyDown(e, focusFirstInput)}
                 />
                 <Input
                     type='text'
@@ -67,6 +94,7 @@ const App = () => {
                     ref={thirdInput}
                     value={thirdNum}
                     onChange={assignThirdNum}
+                    onKeyDown={e => keyDown(e, focusSecondInput)}
                 />
                 <Input
                     type='text'
@@ -75,10 +103,14 @@ const App = () => {
                     ref={fourthInput}
                     value={fourthNum}
                     onChange={assignFourthNum}
+                    onKeyDown={e => keyDown(e, focusThirdInput)}
                 />
 
-                <Button ref={buttonRef}>submit</Button>
+                <Button ref={buttonRef} onKeyDown={e => keyDown(e, focusFourthInput)} type='submit'>
+                    submit
+                </Button>
             </Form>
+            <h2>{message}</h2>
         </Container>
     );
 };
